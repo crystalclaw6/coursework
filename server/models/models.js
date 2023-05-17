@@ -11,6 +11,8 @@ const Course = sequelize.define('course', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     title: {type: DataTypes.STRING},
     description: {type: DataTypes.STRING},
+    task: {type: DataTypes.STRING},
+    code: {type: DataTypes.STRING},
 })
 const CompletedCourses = sequelize.define('completed_courses',{
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},

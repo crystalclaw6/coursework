@@ -32,10 +32,11 @@ class CompletedCoursesController{
         return res.json(courses)
     }
     async getOne(req,res){
-        const id = req.params
+        const {id} = req.params
         const course = await CompletedCourses.findOne({
             where: {id}
         })
+        return res.json(course)
     }
 }
 module.exports = new CompletedCoursesController

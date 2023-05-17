@@ -14,11 +14,17 @@ class UserController{
     async registration(req, res, next){
         const {email, password, role} = req.body
         if (!email || !password){
-            return next(ApiError.badRequest('Некорректный email или пароль'))
+            return next(ApiError.badRequest('Заполните пустые поля'))
         }
         const candidate = await User.findOne({where:{email}})
         if (candidate){
             return next(ApiError.badRequest('Пользователь с таким email уже существует'))
+        }
+        if (!email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)){
+            return next(ApiError.badRequest('Неверный формат почтового адреса'))
+        }
+        if (password.length < 5) {
+            return next(ApiError.badRequest('Пароль должен состоять не менее чем из 5 символов'))
         }
         const hashPassword = await bcrypt.hash(password, 5)
         const user = await User.create({email, role, password: hashPassword})
@@ -28,6 +34,9 @@ class UserController{
     }
     async login(req, res, next){
         const {email, password} = req.body
+        if (!email || !password){
+            return next(ApiError.badRequest('Заполните пустые поля'))
+        }
         const user = await User.findOne({where: {email}})
         if (!user){
             return next(ApiError.internal("Пользователь не найден"))
